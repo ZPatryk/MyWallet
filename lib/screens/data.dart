@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/screens/account.dart';
-import 'package:wallet/screens/my_home_page.dart';
+
 import 'package:wallet/utils/text_stykes.dart';
 
 class Data extends StatefulWidget {
@@ -12,6 +11,40 @@ class Data extends StatefulWidget {
 }
 
 class _DataState extends State<Data> {
+  double _balance = 0.0; // Początkowy balans
+  String _inputValue = ''; // Wartość wpisywana za pomocą klawiatury numerycznej
+  int _selectedTabIndex = 0; // Indeks wybranej zakładki
+
+  // Funkcja do dodania cyfry do wartości wpisywanej
+  void _addDigit(String digit) {
+    setState(() {
+      _inputValue += digit;
+    });
+  }
+
+  // Funkcja do czyszczenia wpisanej wartości
+  void _clearInput() {
+    setState(() {
+      _inputValue = '';
+    });
+  }
+
+  // Funkcja do aktualizacji balansu
+  void _confirmTransaction() {
+    setState(() {
+      double? value = double.tryParse(_inputValue); // Próba konwersji wartości
+      if (value != null) {
+        if (_selectedTabIndex == 0) {
+          // Jeśli wybrany przycisk to 'Przychód', dodajemy wartość do balansu
+          _balance += value;
+        } else {
+          // Jeśli wybrany przycisk to 'Wydatek', odejmujemy wartość od balansu
+          _balance -= value;
+        }
+      }
+      _inputValue = ''; // Czyszczenie wpisanej wartości po zatwierdzeniu transakcji
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +54,17 @@ class _DataState extends State<Data> {
           elevation: 0,
           toolbarHeight: 60,
           leading: IconButton(
-            icon: Icon(Icons.close), // Ikona trzech poziomych kresek
+            icon: Icon(Icons.close), // Ikona zamknięcia (trzy poziome kreski)
             color: Colors.white, // Kolor ikony
             onPressed: () {
-              // Akcja po kliknięciu ikony menu
               print("Menu icon clicked");
-              // Tu można dodać funkcję otwierania menu
             },
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.check), // Ikona dzwoneczka
+              icon: Icon(Icons.check), // Ikona ptaszka jako zatwierdzenie
               color: Colors.white,
-              onPressed: () {
-                print("Notifications icon clicked");
-                // Można tu dodać akcję otwierającą powiadomienia
-              },
+              onPressed: _confirmTransaction, // Funkcja zatwierdzająca
             ),
           ],
         ),
@@ -55,33 +83,30 @@ class _DataState extends State<Data> {
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 50),
                               backgroundColor: Colors.blue,
-                              // Kolor przycisku
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero,
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyAccount(),
-                                ),
-                              );
+                              setState(() {
+                                _selectedTabIndex = 0; // Wybór zakładki Przychód
+                              });
                             },
                             child: Text(
-                              'PRZYCHÓD',
+                              'PRZYCHÓD', // Zmienione z INCOME na PRZYCHÓD
                               style: TextStyles.body,
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 2, // Wysokość linii
-                              color: Colors.white,
+                          if (_selectedTabIndex == 0)
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 2,
+                                color: Colors.white, // Linia podkreślająca aktywny przycisk
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -95,33 +120,30 @@ class _DataState extends State<Data> {
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 50),
                               backgroundColor: Colors.blue,
-                              // Kolor przycisku
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero,
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyHomePage(title: ''),
-                                ),
-                              );
+                              setState(() {
+                                _selectedTabIndex = 1; // Wybór zakładki Wydatek
+                              });
                             },
                             child: Text(
-                              'WYDATEK',
+                              'WYDATEK', // Zmienione z EXPENSE na WYDATEK
                               style: TextStyles.body,
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 2, // Wysokość linii
-                              color: Colors.white,
+                          if (_selectedTabIndex == 1)
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 2,
+                                color: Colors.white, // Linia podkreślająca aktywny przycisk
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -131,17 +153,49 @@ class _DataState extends State<Data> {
               Container(
                 color: Colors.blue,
                 width: double.infinity,
-                height:350, // Wysokość widget
-                child:
-                  Text(
-                    'dolar_counter',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                height: 350,
+                child: Text(
+                  '$_balance PLN', // Wyświetlanie balansu
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: _balance >= 0 ? Colors.green : Colors.red, // Kolor w zależności od wartości balansu
                   ),
+                ),
               ),
-              Container(),
+              const SizedBox(height: 20),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, // 3 kolumny dla przycisków
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                  ),
+                  itemCount: 12, // 12 elementów (cyfry 0-9, kropka, Clear)
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 9) {
+                      return ElevatedButton(
+                        onPressed: () => _addDigit('.'), // Dodanie kropki do wartości
+                        child: const Text('.'),
+                      );
+                    } else if (index == 11) {
+                      return ElevatedButton(
+                        onPressed: _clearInput, // Funkcja czyszcząca
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red),
+                        child: const Text('Clear'), // Tekst Clear na przycisku
+                      );
+                    } else {
+                      String number =
+                      index == 10 ? '0' : (index + 1).toString(); // Cyfry 0-9
+                      return ElevatedButton(
+                        onPressed: () => _addDigit(number), // Dodawanie cyfry do wartości
+                        child: Text(number),
+                      );
+                    }
+                  },
+                ),
+              ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
