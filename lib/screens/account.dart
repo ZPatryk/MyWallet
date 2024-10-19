@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/screens/data.dart';
-import 'package:wallet/screens/my_home_page.dart';
 import 'package:wallet/utils/text_stykes.dart';
 
 class MyAccount extends StatefulWidget {

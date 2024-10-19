@@ -1,16 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/screens/account.dart';
+import 'package:wallet/screens/data.dart';
 import 'package:wallet/utils/text_stykes.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required String title}); // Zmienna title jest nieużywana
+  final double balance;
+
+  final dynamic title;
+
+  const MyHomePage({Key? key, required this.title, required this.balance}) : super(key: key); // Zmienna title jest nieużywana
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(double.infinity, 50),
-                            backgroundColor: Colors.grey[900], // Kolor przycisku
+                            backgroundColor: Colors.grey[900],
+                            // Kolor przycisku
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
@@ -96,7 +103,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(double.infinity, 50),
-                            backgroundColor: Colors.grey[900], // Kolor przycisku
+                            backgroundColor: Colors.grey[900],
+                            // Kolor przycisku
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
@@ -105,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MyHomePage(title: ''),
+                                builder: (context) => const Data(),
                               ),
                             );
                           },
@@ -134,26 +142,33 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             Container(
-              width: 205, // Szerokość przycisku
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent, // Kolor przycisku
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              width: 205,
+              // Szerokość etykiety
+              padding: EdgeInsets.all(16),
+              // Dodanie paddingu dla lepszej czytelności
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                // Tło etykiety
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                // Zaokrąglenie narożników
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    // Cień dla efektu głębi
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // Przesunięcie cienia
                   ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyHomePage(title: ''),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Kwota na koncie',
-                  style: TextStyles.body,
+                ],
+              ),
+              child: Text(
+                'Your current balance is: ${widget.balance} PLN', // Użyj widget.balance
+                // Tekst etykiety
+                textAlign: TextAlign.center, // Wyśrodkowanie tekstu
+                style: TextStyle(
+                  fontSize: 16, // Rozmiar czcionki
+                  fontWeight: FontWeight.bold, // Pogrubienie tekstu
+                  color: Colors.white, // Kolor tekstu dla kontrastu
                 ),
               ),
             ),
@@ -163,14 +178,19 @@ class _MyHomePageState extends State<MyHomePage> {
             // Nowy widget na wykres
             Container(
               width: double.infinity,
-              height: 500, // Wysokość widgetu
-              color: Colors.grey[900], // Kolor tła jako placeholder
-              padding: EdgeInsets.only(top: 16), // Opcjonalnie, odstęp od góry
+              height: 500,
+              // Wysokość widgetu
+              color: Colors.grey[900],
+              // Kolor tła jako placeholder
+              padding: EdgeInsets.only(top: 16),
+              // Opcjonalnie, odstęp od góry
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch, // Ustawienie elementów na całą szerokość
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                // Ustawienie elementów na całą szerokość
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Rozłożenie tekstu i ikony
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // Rozłożenie tekstu i ikony
                     children: [
                       Text(
                         'Struktura wydatków',

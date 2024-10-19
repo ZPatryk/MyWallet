@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:wallet/screens/my_home_page.dart';
 import 'package:wallet/utils/text_stykes.dart';
 
 class Data extends StatefulWidget {
@@ -18,14 +18,14 @@ class _DataState extends State<Data> {
   // Funkcja do dodania cyfry do wartości wpisywanej
   void _addDigit(String digit) {
     setState(() {
-      _inputValue += digit;
+      _inputValue += digit; // Aktualizacja wartości wpisywanej
     });
   }
 
   // Funkcja do czyszczenia wpisanej wartości
   void _clearInput() {
     setState(() {
-      _inputValue = '';
+      _inputValue = ''; // Czyszczenie wartości
     });
   }
 
@@ -64,7 +64,17 @@ class _DataState extends State<Data> {
             IconButton(
               icon: Icon(Icons.check), // Ikona ptaszka jako zatwierdzenie
               color: Colors.white,
-              onPressed: _confirmTransaction, // Funkcja zatwierdzająca
+              onPressed: () {
+                _confirmTransaction(); // Najpierw wywołaj funkcję zatwierdzającą
+
+                // Następnie nawiguj do SummaryPage, przekazując aktualny balans
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(title: '', balance: _balance), // Przekazanie balansu
+                  ),
+                );
+              }, // Zamykamy funkcję onPressed
             ),
           ],
         ),
@@ -155,10 +165,8 @@ class _DataState extends State<Data> {
                 width: double.infinity,
                 height: 350,
                 child: Text(
-                  '$_balance PLN', // Wyświetlanie balansu
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: _balance >= 0 ? Colors.green : Colors.red, // Kolor w zależności od wartości balansu
-                  ),
+                  "$_inputValue", // Wyświetlamy bieżąco wprowadzoną wartość
+                  style: TextStyle(fontSize: 24),
                 ),
               ),
               const SizedBox(height: 20),
