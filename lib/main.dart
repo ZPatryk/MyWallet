@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet/provider/balance_model.dart';
 import 'package:wallet/screens/my_home_page.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => BalanceModel(100.0), // Inicjalizujemy początkowy balans
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter Demo',
-      home: MyHomePage(title: 'Flutter Demo Home Page', balance: 0,),
+    return MaterialApp(
+      title: 'Wallet App',
+      home: MyHomePage(),
     );
   }
 }
-

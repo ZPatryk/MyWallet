@@ -1,209 +1,116 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/screens/my_home_page.dart';
-import 'package:wallet/utils/text_stykes.dart';
+import 'package:provider/provider.dart';
+import '../provider/balance_model.dart';
 
 class Data extends StatefulWidget {
-  const Data({super.key});
-
   @override
-  State<Data> createState() => _DataState();
+  _DataState createState() => _DataState();
 }
 
 class _DataState extends State<Data> {
-  double _balance = 0.0; // Początkowy balans
-  String _inputValue = ''; // Wartość wpisywana za pomocą klawiatury numerycznej
-  int _selectedTabIndex = 0; // Indeks wybranej zakładki
+  String _inputValue = ''; // Wartość wpisywana
+  int _selectedTabIndex = 0; // Indeks wybranej zakładki (Przychód/Wydatek)
 
-  // Funkcja do dodania cyfry do wartości wpisywanej
+  // Funkcja do dodawania cyfry
   void _addDigit(String digit) {
     setState(() {
-      _inputValue += digit; // Aktualizacja wartości wpisywanej
+      _inputValue += digit;
     });
   }
 
-  // Funkcja do czyszczenia wpisanej wartości
+  // Funkcja do czyszczenia wpisu
   void _clearInput() {
     setState(() {
-      _inputValue = ''; // Czyszczenie wartości
+      _inputValue = '';
     });
   }
 
-  // Funkcja do aktualizacji balansu
-  void _confirmTransaction() {
-    setState(() {
-      double? value = double.tryParse(_inputValue); // Próba konwersji wartości
-      if (value != null) {
-        if (_selectedTabIndex == 0) {
-          // Jeśli wybrany przycisk to 'Przychód', dodajemy wartość do balansu
-          _balance += value;
-        } else {
-          // Jeśli wybrany przycisk to 'Wydatek', odejmujemy wartość od balansu
-          _balance -= value;
-        }
+  // Zatwierdzenie transakcji i aktualizacja balansu
+  void _confirmTransaction(BuildContext context) {
+    final balanceModel = Provider.of<BalanceModel>(context, listen: false); // Pobierz model balansu
+    double? value = double.tryParse(_inputValue);
+
+    if (value != null) {
+      if (_selectedTabIndex == 0) {
+        balanceModel.addBalance(value); // Dodaj do balansu
+      } else {
+        balanceModel.subtractBalance(value); // Odejmij od balansu
       }
-      _inputValue = ''; // Czyszczenie wpisanej wartości po zatwierdzeniu transakcji
+    }
+
+    setState(() {
+      _inputValue = ''; // Wyczyść po zatwierdzeniu
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          elevation: 0,
-          toolbarHeight: 60,
-          leading: IconButton(
-            icon: Icon(Icons.close), // Ikona zamknięcia (trzy poziome kreski)
-            color: Colors.white, // Kolor ikony
-            onPressed: () {
-              print("Menu icon clicked");
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.check), // Ikona ptaszka jako zatwierdzenie
-              color: Colors.white,
-              onPressed: () {
-                _confirmTransaction(); // Najpierw wywołaj funkcję zatwierdzającą
-
-                // Następnie nawiguj do SummaryPage, przekazując aktualny balans
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: '', balance: _balance), // Przekazanie balansu
-                  ),
-                );
-              }, // Zamykamy funkcję onPressed
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      child: Stack(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              backgroundColor: Colors.blue,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedTabIndex = 0; // Wybór zakładki Przychód
-                              });
-                            },
-                            child: Text(
-                              'PRZYCHÓD', // Zmienione z INCOME na PRZYCHÓD
-                              style: TextStyles.body,
-                            ),
-                          ),
-                          if (_selectedTabIndex == 0)
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 2,
-                                color: Colors.white, // Linia podkreślająca aktywny przycisk
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      child: Stack(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              backgroundColor: Colors.blue,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedTabIndex = 1; // Wybór zakładki Wydatek
-                              });
-                            },
-                            child: Text(
-                              'WYDATEK', // Zmienione z EXPENSE na WYDATEK
-                              style: TextStyles.body,
-                            ),
-                          ),
-                          if (_selectedTabIndex == 1)
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 2,
-                                color: Colors.white, // Linia podkreślająca aktywny przycisk
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                color: Colors.blue,
-                width: double.infinity,
-                height: 350,
-                child: Text(
-                  "$_inputValue", // Wyświetlamy bieżąco wprowadzoną wartość
-                  style: TextStyle(fontSize: 24),
+      appBar: AppBar(
+        title: Text('Budżety i Cele'),
+      ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedTabIndex = 0; // Przychód
+                    });
+                  },
+                  child: Text('PRZYCHÓD'),
                 ),
               ),
-              const SizedBox(height: 20),
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // 3 kolumny dla przycisków
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                  ),
-                  itemCount: 12, // 12 elementów (cyfry 0-9, kropka, Clear)
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 9) {
-                      return ElevatedButton(
-                        onPressed: () => _addDigit('.'), // Dodanie kropki do wartości
-                        child: const Text('.'),
-                      );
-                    } else if (index == 11) {
-                      return ElevatedButton(
-                        onPressed: _clearInput, // Funkcja czyszcząca
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red),
-                        child: const Text('Clear'), // Tekst Clear na przycisku
-                      );
-                    } else {
-                      String number =
-                      index == 10 ? '0' : (index + 1).toString(); // Cyfry 0-9
-                      return ElevatedButton(
-                        onPressed: () => _addDigit(number), // Dodawanie cyfry do wartości
-                        child: Text(number),
-                      );
-                    }
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedTabIndex = 1; // Wydatek
+                    });
                   },
+                  child: Text('WYDATEK'),
                 ),
               ),
             ],
           ),
-        ));
+          SizedBox(height: 20),
+          Text('$_inputValue', style: TextStyle(fontSize: 32)),
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
+            itemCount: 12, // 0-9, ., Clear
+            itemBuilder: (context, index) {
+              if (index == 9) {
+                return ElevatedButton(
+                  onPressed: () => _addDigit('.'),
+                  child: Text('.'),
+                );
+              } else if (index == 11) {
+                return ElevatedButton(
+                  onPressed: _clearInput,
+                  child: Text('Clear'),
+                );
+              } else {
+                String number = index == 10 ? '0' : (index + 1).toString();
+                return ElevatedButton(
+                  onPressed: () => _addDigit(number),
+                  child: Text(number),
+                );
+              }
+            },
+          ),
+          ElevatedButton(
+            onPressed: () => _confirmTransaction(context), // Zatwierdzenie transakcji
+            child: Text('Zatwierdź'),
+          ),
+        ],
+      ),
+    );
   }
 }
