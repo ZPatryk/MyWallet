@@ -1,19 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
-import 'account.dart';  // Import twojego ekranu "Konto"
-import 'data.dart';     // Import twojego ekranu "Budżety i Cele"
+import '../utils/text_styles.dart';
+import 'account.dart'; // Import twojego ekranu "Konto"
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedTabIndex = 0;
+
+  void _selectTab(int index) {
+    setState(() {
+      _selectedTabIndex = index;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    final balanceModel = Provider.of<BalanceModel>(context); // Pobierz balans z Provider
+    final balanceModel =
+        Provider.of<BalanceModel>(context); // Pobierz balans z Provider
 
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
-        title: Text('Strona główna'),
+        elevation: 0,
+        toolbarHeight: 60,
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          color: Colors.white,
+          onPressed: () {
+            print("Menu icon clicked");
+            // Add menu opening functionality here
+          },
+        ),
+        title: Text(
+          'Strona główna',
+          style: TextStyles.header,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            color: Colors.white,
+            onPressed: () {
+              print("Notifications icon clicked");
+              // Add notification functionality here
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -21,29 +60,85 @@ class MyHomePage extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyAccount(), // Przejście do ekranu Konto
+                child: Container(
+                  height: 50,
+                  child: Stack(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          backgroundColor: Colors.grey[900],
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () {
+                          _selectTab(0);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyAccount(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Konto',
+                          style: TextStyles.body,
+                        ),
                       ),
-                    );
-                  },
-                  child: Text('Konto', style: TextStyle(fontSize: 18)),
+                      if (_selectedTabIndex == 0)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Data(), // Przejście do ekranu Budżety i Cele
+                child: Container(
+                  height: 50,
+                  child: Stack(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          backgroundColor: Colors.grey[900],
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () {
+                          _selectTab(1);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyAccount(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Budżet i cele',
+                          style: TextStyles.body,
+                        ),
                       ),
-                    );
-                  },
-                  child: Text('Budżety i Cele', style: TextStyle(fontSize: 18)),
+                      if (_selectedTabIndex == 1)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -8,6 +8,12 @@ class TextStyles {
     color: Colors.white,
   );
 
+  static const TextStyle darkheader = TextStyle(
+    fontSize: 120,
+    fontWeight: FontWeight.normal,
+    color: Colors.white,
+  );
+
   // Styl dla podtytułów
   static const TextStyle subHeader = TextStyle(
     fontSize: 18,

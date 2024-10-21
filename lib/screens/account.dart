@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/screens/data.dart';
-import 'package:wallet/utils/text_stykes.dart';
+import 'package:wallet/utils/text_styles.dart';
 
 class MyAccount extends StatefulWidget {
   const MyAccount({super.key});

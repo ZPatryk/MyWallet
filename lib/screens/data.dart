@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
+import 'my_home_page.dart';
+import '../utils/text_styles.dart';
 
 class Data extends StatefulWidget {
   @override
@@ -27,7 +29,8 @@ class _DataState extends State<Data> {
 
   // Zatwierdzenie transakcji i aktualizacja balansu
   void _confirmTransaction(BuildContext context) {
-    final balanceModel = Provider.of<BalanceModel>(context, listen: false); // Pobierz model balansu
+    final balanceModel = Provider.of<BalanceModel>(context,
+        listen: false); // Pobierz model balansu
     double? value = double.tryParse(_inputValue);
 
     if (value != null) {
@@ -47,67 +50,157 @@ class _DataState extends State<Data> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Budżety i Cele'),
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        toolbarHeight: 60,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          color: Colors.white,
+          onPressed: () {
+            print("Menu icon clicked");
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.check),
+              color: Colors.white,
+              onPressed: () {
+                _confirmTransaction(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                );
+              }),
+        ],
       ),
       body: Column(
         children: [
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedTabIndex = 0; // Przychód
-                    });
-                  },
-                  child: Text('PRZYCHÓD'),
+                child: Container(
+                  height: 50,
+                  child: Stack(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          backgroundColor: Colors.blueAccent,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedTabIndex = 0;
+                          });
+                        },
+                        child: Text(
+                          'PRZYCHÓD',
+                          style: TextStyles.body,
+                        ),
+                      ),
+                      if (_selectedTabIndex == 0)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedTabIndex = 1; // Wydatek
-                    });
-                  },
-                  child: Text('WYDATEK'),
+                child: Container(
+                  height: 50,
+                  child: Stack(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          backgroundColor: Colors.blue,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedTabIndex = 1;
+                          });
+                        },
+                        child: Text(
+                          'WYDATEK',
+                          style: TextStyles.body,
+                        ),
+                      ),
+                      if (_selectedTabIndex == 1)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20),
-          Text('$_inputValue', style: TextStyle(fontSize: 32)),
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
+
+          Container(
+            height: 250,
+              color: Colors.blue,
+              child: Center(
+                  child: Text('$_inputValue', style: TextStyles.darkheader))),
+          Container(
+            width: 400, // Szerokość kontenera
+            height: 450, // Wysokość kontenera
+            padding: EdgeInsets.all(1), // Odstępy wewnętrzne
+            child: GridView.builder(
+              shrinkWrap: true, // Grid zajmuje tylko tyle miejsca, ile potrzebuje
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // Liczba kolumn w siatce
+                mainAxisSpacing: 10, // Odstępy między wierszami
+                crossAxisSpacing: 10, // Odstępy między kolumnami
+                childAspectRatio: 1.2,
+              ),
+              itemCount: 12, // 0-9, '.', 'Clear'
+              itemBuilder: (context, index) {
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black87, // Kolor tła (pomarańczowy)
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0), // Zaokrąglenie rogów
+                    ),
+                    minimumSize: Size(100, 100), // Minimalny rozmiar przycisku
+                  ),
+                  onPressed: () {
+                    if (index == 9) {
+                      _addDigit('.'); // Dodaj kropkę
+                    } else if (index == 10) {
+                      _addDigit('0'); // Dodaj cyfrę 0
+                    } else if (index == 11) {
+                      _clearInput(); // Wyczyść wejście
+                    } else {
+                      String number = (index + 1).toString(); // Cyfry 1-9
+                      _addDigit(number); // Dodaj cyfrę
+                    }
+                  },
+                  child: Text(
+                    index == 9 ? '.' : (index == 10 ? '0' : (index == 11 ? 'Clear' : (index + 1).toString())),
+                    style: TextStyle(color: Colors.white), // Kolor tekstu
+                  ),
+                );
+              },
             ),
-            itemCount: 12, // 0-9, ., Clear
-            itemBuilder: (context, index) {
-              if (index == 9) {
-                return ElevatedButton(
-                  onPressed: () => _addDigit('.'),
-                  child: Text('.'),
-                );
-              } else if (index == 11) {
-                return ElevatedButton(
-                  onPressed: _clearInput,
-                  child: Text('Clear'),
-                );
-              } else {
-                String number = index == 10 ? '0' : (index + 1).toString();
-                return ElevatedButton(
-                  onPressed: () => _addDigit(number),
-                  child: Text(number),
-                );
-              }
-            },
-          ),
-          ElevatedButton(
-            onPressed: () => _confirmTransaction(context), // Zatwierdzenie transakcji
-            child: Text('Zatwierdź'),
           ),
         ],
       ),

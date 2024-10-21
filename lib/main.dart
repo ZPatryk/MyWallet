@@ -7,7 +7,7 @@ import 'package:wallet/screens/my_home_page.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => BalanceModel(100.0), // Inicjalizujemy początkowy balans
+      create: (context) => BalanceModel(0.0), // Inicjalizujemy początkowy balans
       child: MyApp(),
     ),
   );
