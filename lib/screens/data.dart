@@ -3,10 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:wallet/screens/account.dart';
 import 'package:wallet/screens/category.dart';
 import '../provider/balance_model.dart';
-import 'my_home_page.dart';
 import '../utils/text_styles.dart';
 
 class Data extends StatefulWidget {
+  late final String categoryName;
+
+  Data({required this.categoryName});
+
   @override
   _DataState createState() => _DataState();
 }
@@ -156,14 +159,29 @@ class _DataState extends State<Data> {
               ),
             ],
           ),
-
           Container(
-            height: 250,
+              height: 220,
               color: Colors.blue,
               child: Center(
                   child: Text('$_inputValue', style: TextStyles.darkheader))),
           Container(
-            height: 50,
+            width: double.infinity,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.blue[600],
+            ),
+            child: Center(
+              child: Text(
+                '${widget.categoryName}', // Dostęp do parametru categoryName
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          ),
+          Container(
+            height: 30,
             width: double.infinity,
             color: Colors.blueAccent,
             child: ElevatedButton(
@@ -180,19 +198,19 @@ class _DataState extends State<Data> {
                 );
               },
               child: Text(
-                'Kategoria',
-                style: TextStyles.header,
+                'Zmień kategorię',
+                style: TextStyles.body,
               ),
             ),
           ),
-
           Container(
             width: double.infinity, // Szerokość kontenera
             height: 450, // Wysokość kontenera
             padding: EdgeInsets.all(1), // Odstępy wewnętrzne
             color: Colors.black87,
             child: GridView.builder(
-              shrinkWrap: true, // Grid zajmuje tylko tyle miejsca, ile potrzebuje
+              shrinkWrap:
+                  true, // Grid zajmuje tylko tyle miejsca, ile potrzebuje
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, // Liczba kolumn w siatce
                 mainAxisSpacing: 10, // Odstępy między wierszami
@@ -205,7 +223,8 @@ class _DataState extends State<Data> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black87, // Kolor tła (pomarańczowy)
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0), // Zaokrąglenie rogów
+                      borderRadius:
+                          BorderRadius.circular(0), // Zaokrąglenie rogów
                     ),
                     minimumSize: Size(100, 100), // Minimalny rozmiar przycisku
                   ),
@@ -222,7 +241,11 @@ class _DataState extends State<Data> {
                     }
                   },
                   child: Text(
-                    index == 9 ? '.' : (index == 10 ? '0' : (index == 11 ? 'Clear' : (index + 1).toString())),
+                    index == 9
+                        ? '.'
+                        : (index == 10
+                            ? '0'
+                            : (index == 11 ? 'Clear' : (index + 1).toString())),
                     style: TextStyles.normalheader, // Kolor tekstu
                   ),
                 );

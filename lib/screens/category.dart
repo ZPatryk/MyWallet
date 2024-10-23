@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../utils/text_styles.dart';
+import 'data.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -41,6 +42,16 @@ class _CategoryState extends State<Category> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Metoda nawigacji do nowego ekranu
+  void goToDataClass(String categoryName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Data(categoryName: categoryName),
       ),
     );
   }
@@ -99,65 +110,49 @@ class _CategoryState extends State<Category> {
             Icons.food_bank_rounded,
             'Jedzenie',
             Colors.green,
-            () {
-              print("Jedzenie");
-            },
+            () => goToDataClass('Jedzenie'),
           ),
           buildStyledContainer(
             Icons.shopping_bag_sharp,
             'Zakupy',
             Colors.blue,
-            () {
-              print("Zakupy");
-            },
+            () => goToDataClass('Zakupy'),
           ),
           buildStyledContainer(
             Icons.house,
             'Dom',
             Colors.pink,
-            () {
-              print("Dom");
-            },
+            () => goToDataClass('Dom'),
           ),
           buildStyledContainer(
             Icons.directions_car,
             'Samochód',
             Colors.red,
-            () {
-              print("Samochód");
-            },
+            () => goToDataClass('Samochód'),
           ),
           buildStyledContainer(
             Icons.directions_bus,
             'Transport',
             Colors.orange,
-            () {
-              print("Transport");
-            },
+            () => goToDataClass('Transport'),
           ),
           buildStyledContainer(
             Icons.sports_soccer,
             'Sport',
             Colors.teal,
-            () {
-              print("Sport");
-            },
+            () => goToDataClass('Sport'),
           ),
           buildStyledContainer(
             Icons.health_and_safety,
             'Zdrowie',
             Colors.purple,
-            () {
-              print("Zdrowie");
-            },
+            () => goToDataClass('Zdrowie'),
           ),
           buildStyledContainer(
             Icons.more_horiz,
             'Inne',
             Colors.grey,
-            () {
-              print("Inne");
-            },
+            () => goToDataClass('Inne'),
           ),
         ],
       ),

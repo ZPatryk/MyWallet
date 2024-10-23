@@ -38,7 +38,9 @@ class _MyAccountState extends State<MyAccount> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Data(),
+              builder: (context) => Data(
+                categoryName: '',
+              ),
             ),
           );
         },
