@@ -14,6 +14,12 @@ class TextStyles {
     color: Colors.white,
   );
 
+  static const TextStyle normalheader = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.normal,
+    color: Colors.white,
+  );
+
   // Styl dla podtytułów
   static const TextStyle subHeader = TextStyle(
     fontSize: 18,

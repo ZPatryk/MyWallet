@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/screens/account.dart';
+import 'package:wallet/screens/category.dart';
 import '../provider/balance_model.dart';
 import 'my_home_page.dart';
 import '../utils/text_styles.dart';
@@ -69,7 +71,7 @@ class _DataState extends State<Data> {
                 _confirmTransaction(context);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  MaterialPageRoute(builder: (context) => MyAccount()),
                 );
               }),
         ],
@@ -86,7 +88,7 @@ class _DataState extends State<Data> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),
-                          backgroundColor: Colors.blueAccent,
+                          backgroundColor: Colors.indigoAccent,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
@@ -123,7 +125,7 @@ class _DataState extends State<Data> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.indigoAccent,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
@@ -161,9 +163,34 @@ class _DataState extends State<Data> {
               child: Center(
                   child: Text('$_inputValue', style: TextStyles.darkheader))),
           Container(
-            width: 400, // Szerokość kontenera
+            height: 50,
+            width: double.infinity,
+            color: Colors.blueAccent,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                backgroundColor: Colors.indigoAccent,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Category(),
+                  ),
+                );
+              },
+              child: Text(
+                'Kategoria',
+                style: TextStyles.header,
+              ),
+            ),
+          ),
+
+          Container(
+            width: double.infinity, // Szerokość kontenera
             height: 450, // Wysokość kontenera
             padding: EdgeInsets.all(1), // Odstępy wewnętrzne
+            color: Colors.black87,
             child: GridView.builder(
               shrinkWrap: true, // Grid zajmuje tylko tyle miejsca, ile potrzebuje
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -196,7 +223,7 @@ class _DataState extends State<Data> {
                   },
                   child: Text(
                     index == 9 ? '.' : (index == 10 ? '0' : (index == 11 ? 'Clear' : (index + 1).toString())),
-                    style: TextStyle(color: Colors.white), // Kolor tekstu
+                    style: TextStyles.normalheader, // Kolor tekstu
                   ),
                 );
               },
