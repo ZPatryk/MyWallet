@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/screens/account.dart';
 import 'package:wallet/screens/category.dart';
 import '../provider/balance_model.dart';
+import '../provider/category_expenses_model.dart';
 import '../utils/text_styles.dart';
 
 class Data extends StatefulWidget {
@@ -36,11 +37,14 @@ class _DataState extends State<Data> {
   void _confirmTransaction(BuildContext context) {
     final balanceModel = Provider.of<BalanceModel>(context,
         listen: false); // Pobierz model balansu
+    final categoryExpensesModel =
+        Provider.of<CategoryExpensesModel>(context, listen: false);
     double? value = double.tryParse(_inputValue);
 
     if (value != null) {
       if (_selectedTabIndex == 0) {
         balanceModel.addBalance(value); // Dodaj do balansu
+        categoryExpensesModel.addExpense(value, widget.categoryName);
       } else {
         balanceModel.subtractBalance(value); // Odejmij od balansu
       }

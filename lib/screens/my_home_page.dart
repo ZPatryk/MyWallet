@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
+import '../provider/category_expenses_model.dart';
 import '../utils/text_styles.dart';
 import 'account.dart'; // Import twojego ekranu "Konto"
 
@@ -18,12 +19,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final balanceModel =
         Provider.of<BalanceModel>(context); // Pobierz balans z Provider
+    final categoryExpensesModel = Provider.of<CategoryExpensesModel>(context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -166,6 +166,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: categoryExpensesModel.categoryExpenses.length,
+              itemBuilder: (context, index) {
+                String category = categoryExpensesModel.categoryExpenses.keys
+                    .elementAt(index);
+                double expense =
+                    categoryExpensesModel.categoryExpenses[category]!;
+
+                return ListTile(
+                  title: Text(
+                    '$category',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: Text(
+                    '${expense.toStringAsFixed(2)} PLN',
+                    style: TextStyle(color: Colors.redAccent),
+                  ),
+                );
+              },
             ),
           ),
         ],
