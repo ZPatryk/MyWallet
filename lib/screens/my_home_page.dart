@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
 import '../provider/category_expenses_model.dart';
+import '../utils/expenses.dart';
 import '../utils/text_styles.dart';
 import 'account.dart';
 import '../utils/category_expenses_model.dart'; // Import twojego ekranu "Konto"
@@ -183,9 +184,24 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             padding: EdgeInsets.all(16),
-            height: 300, // Określenie rozmiaru kontenera
-            child: CategoryExpensesPieChart(), // Wyświetlenie wykresu kołowego
-          ),
+            height: 300, // Wysokość kontenera
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3, // Lewa kolumna zajmuje 2/3 szerokości
+                  child: CategoryExpensesPieChart(), // Wykres kołowy
+                ),
+                SizedBox(width: 16), // Odstęp między kolumnami
+                Expanded(
+                  flex: 2, // Prawa kolumna zajmuje 1/3 szerokości
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    child: Expenses(),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
