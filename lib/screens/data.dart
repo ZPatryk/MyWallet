@@ -44,9 +44,10 @@ class _DataState extends State<Data> {
     if (value != null) {
       if (_selectedTabIndex == 0) {
         balanceModel.addBalance(value); // Dodaj do balansu
-        categoryExpensesModel.addExpense(value, widget.categoryName);
+
       } else {
         balanceModel.subtractBalance(value); // Odejmij od balansu
+        categoryExpensesModel.addExpense(value, widget.categoryName);
       }
     }
 

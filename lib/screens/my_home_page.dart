@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
 import '../provider/category_expenses_model.dart';
 import '../utils/text_styles.dart';
-import 'account.dart'; // Import twojego ekranu "Konto"
+import 'account.dart';
+import '../utils/category_expenses_model.dart'; // Import twojego ekranu "Konto"
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -160,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             child: Text(
               '${balanceModel.balance} PLN', // Wyświetl balans
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -168,27 +169,22 @@ class _MyHomePageState extends State<MyHomePage> {
               textAlign: TextAlign.center,
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: categoryExpensesModel.categoryExpenses.length,
-              itemBuilder: (context, index) {
-                String category = categoryExpensesModel.categoryExpenses.keys
-                    .elementAt(index);
-                double expense =
-                    categoryExpensesModel.categoryExpenses[category]!;
-
-                return ListTile(
-                  title: Text(
-                    '$category',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  trailing: Text(
-                    '${expense.toStringAsFixed(2)} PLN',
-                    style: TextStyle(color: Colors.redAccent),
-                  ),
-                );
-              },
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
+            padding: EdgeInsets.all(16),
+            height: 300, // Określenie rozmiaru kontenera
+            child: CategoryExpensesPieChart(), // Wyświetlenie wykresu kołowego
           ),
         ],
       ),

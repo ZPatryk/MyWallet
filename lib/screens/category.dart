@@ -69,6 +69,12 @@ class _CategoryState extends State<Category> {
       ),
       body: Column(
         children: [
+          Container(
+            width: double.infinity,
+            height: 30,
+            color: Colors.black38,
+            //child: Text("Moje wydatki", style: TextStyles.,),
+          ),
           SizedBox(height: 10),
           Container(
             width: double.infinity,
