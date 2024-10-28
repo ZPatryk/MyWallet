@@ -27,7 +27,7 @@ class _MyAccountState extends State<MyAccount> {
           icon: Icon(Icons.arrow_back), // Ikona strzałki wstecz
           color: Colors.white, // Kolor ikony
           onPressed: () {
-            Navigator.pop(context); // Powrót do poprzedniego ekranu
+            Navigator.pushNamed(context, '/'); // Powrót do poprzedniego ekranu
           },
         ),
         title: Text(
@@ -75,14 +75,7 @@ class _MyAccountState extends State<MyAccount> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("Plus clicked");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Data(
-                categoryName: '',
-              ),
-            ),
-          );
+          Navigator.pushNamed(context, '/data');
         },
         backgroundColor: Colors.blueAccent,
         child: Icon(Icons.add),

@@ -76,12 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onPressed: () {
                           _selectTab(0);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyAccount(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/account');
                         },
                         child: Text(
                           'Konto',
@@ -117,12 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onPressed: () {
                           _selectTab(1);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyAccount(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/');
                         },
                         child: Text(
                           'Budżet i cele',

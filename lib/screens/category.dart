@@ -64,7 +64,7 @@ class _CategoryState extends State<Category> {
         backgroundColor: Colors.grey[900],
         title: const Text(
           'Kategoria',
-          style: TextStyles.header,
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Column(

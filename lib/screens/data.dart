@@ -44,7 +44,6 @@ class _DataState extends State<Data> {
     if (value != null) {
       if (_selectedTabIndex == 0) {
         balanceModel.addBalance(value); // Dodaj do balansu
-
       } else {
         balanceModel.subtractBalance(value); // Odejmij od balansu
         categoryExpensesModel.addExpense(value, widget.categoryName);
@@ -68,7 +67,7 @@ class _DataState extends State<Data> {
           color: Colors.white,
           onPressed: () {
             print("Menu icon clicked");
-            Navigator.pop(context);
+            Navigator.pushNamed(context, '/account');
           },
         ),
         actions: [
@@ -77,10 +76,7 @@ class _DataState extends State<Data> {
               color: Colors.white,
               onPressed: () {
                 _confirmTransaction(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyAccount()),
-                );
+                Navigator.pushReplacementNamed(context, '/');
               }),
         ],
       ),
@@ -195,12 +191,7 @@ class _DataState extends State<Data> {
                 backgroundColor: Colors.indigoAccent,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Category(),
-                  ),
-                );
+                Navigator.pushNamed(context, '/category');
               },
               child: Text(
                 'Zmień kategorię',

@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/provider/balance_model.dart';
 import 'package:wallet/provider/category_expenses_model.dart'; // Import nowego modelu
+import 'package:wallet/screens/account.dart';
+import 'package:wallet/screens/category.dart';
+import 'package:wallet/screens/data.dart';
 import 'package:wallet/screens/my_home_page.dart';
+import 'package:wallet/utils/category_expenses_model.dart';
+import 'package:wallet/utils/expenses.dart';
 
 void main() {
   runApp(
@@ -25,7 +30,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Wallet App',
-      home: MyHomePage(),
+
+      // Definicja mapy tras z nazwami
+      initialRoute: '/', // Ustawia domyślną trasę na główną stronę
+      routes: {
+        '/': (context) => MyHomePage(), // Domyślna strona główna
+        '/account': (context) => MyAccount(),
+        '/category': (context) => Category(),
+        '/data': (context) => Data(categoryName: ''),
+        '/categoryexpenses': (context) => CategoryExpensesPieChart(),
+        '/expenses': (context) => Expenses(),
+      },
     );
   }
 }
