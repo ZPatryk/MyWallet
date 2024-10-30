@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/screens/data.dart';
 import 'package:wallet/utils/text_styles.dart';
 
 import '../provider/category_expenses_model.dart';

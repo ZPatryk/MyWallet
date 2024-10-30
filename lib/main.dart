@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/provider/balance_model.dart';
 import 'package:wallet/provider/category_expenses_model.dart'; // Import nowego modelu
+import 'package:wallet/provider/subtract_model.dart';
 import 'package:wallet/screens/account.dart';
 import 'package:wallet/screens/category.dart';
 import 'package:wallet/screens/data.dart';
@@ -19,6 +20,7 @@ void main() {
         ChangeNotifierProvider(
             create: (context) =>
                 CategoryExpensesModel()), // Drugi model dla wydatków w kategoriach
+        ChangeNotifierProvider(create: (context) => SubtractModel(0.0)),
       ],
       child: MyApp(),
     ),
@@ -30,11 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Wallet App',
-
-      // Definicja mapy tras z nazwami
-      initialRoute: '/', // Ustawia domyślną trasę na główną stronę
+      initialRoute: '/',
       routes: {
-        '/': (context) => MyHomePage(), // Domyślna strona główna
+        '/': (context) => MyHomePage(),
         '/account': (context) => MyAccount(),
         '/category': (context) => Category(),
         '/data': (context) => Data(categoryName: ''),

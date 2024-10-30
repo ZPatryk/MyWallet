@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/balance_model.dart';
 import '../provider/category_expenses_model.dart';
+import '../provider/subtract_model.dart';
 import '../utils/expenses.dart';
 import '../utils/text_styles.dart';
-import 'account.dart';
 import '../utils/category_expenses_model.dart'; // Import twojego ekranu "Konto"
 
 class MyHomePage extends StatefulWidget {
@@ -25,7 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final balanceModel =
         Provider.of<BalanceModel>(context); // Pobierz balans z Provider
-    final categoryExpensesModel = Provider.of<CategoryExpensesModel>(context);
+    final subtractModel = Provider.of<SubtractModel>(context, listen: false);
+    //final categoryExpensesModel = Provider.of<CategoryExpensesModel>(context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -138,20 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 20),
           // Wyświetlanie balansu
           Container(
-            padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.blueAccent,
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
-              ],
             ),
             child: Text(
-              '${balanceModel.balance} PLN', // Wyświetl balans
+              'Saldo: ${balanceModel.balance.toStringAsFixed(2)} zł', // Wyświetl balans
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -162,23 +155,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
             ),
             padding: EdgeInsets.all(16),
-            height: 300, // Wysokość kontenera
+            height: 300,
             child: Row(
               children: [
                 Expanded(
-                  flex: 3, // Lewa kolumna zajmuje 2/3 szerokości
+                  flex: 3, // Lewa kolumna zajmuje 3 z 5
                   child: CategoryExpensesPieChart(), // Wykres kołowy
                 ),
                 SizedBox(width: 16), // Odstęp między kolumnami
@@ -191,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

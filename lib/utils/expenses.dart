@@ -29,14 +29,19 @@ class Expenses extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 20, // Ustawia szerokość kontenera na 20 pikseli
-                height: 20, // Ustawia wysokość kontenera na 20 pikseli
-                color: _getCategoryColor(category), // Używa koloru kategorii
+                width: 12, // Ustawia szerokość kontenera na 20 pikseli
+                height: 12, // Ustawia wysokość kontenera na 20 pikseli
+                decoration: BoxDecoration(
+                  color: _getCategoryColor(
+                      category), // Używa koloru kategorii wewnątrz dekoracji
+                  borderRadius: BorderRadius.circular(
+                      6), // Zaokrąglenie narożników kontenera
+                ),
               ),
               SizedBox(width: 8), // Dodaje odstęp między kontenerem a tekstem
               Expanded(
                 child: Text(
-                  '$category: ${expense.toStringAsFixed(2)} PLN', // Wyświetla kategorię i kwotę z dokładnością do dwóch miejsc
+                  '$category: ${expense.toStringAsFixed(1)} zł', // Wyświetla kategorię i kwotę z dokładnością do dwóch miejsc
                   style: TextStyle(
                     color: Colors.white, // Ustawia kolor tekstu na biały
                     fontSize: 16, // Ustawia rozmiar tekstu na 16 pikseli

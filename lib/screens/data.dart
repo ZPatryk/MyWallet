@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/screens/account.dart';
-import 'package:wallet/screens/category.dart';
+import 'package:wallet/provider/subtract_model.dart';
 import '../provider/balance_model.dart';
 import '../provider/category_expenses_model.dart';
 import '../utils/text_styles.dart';
@@ -41,12 +40,15 @@ class _DataState extends State<Data> {
         Provider.of<CategoryExpensesModel>(context, listen: false);
     double? value = double.tryParse(_inputValue);
 
+    final subtractModel = Provider.of<SubtractModel>(context, listen: false);
+
     if (value != null) {
       if (_selectedTabIndex == 0) {
         balanceModel.addBalance(value); // Dodaj do balansu
       } else {
         balanceModel.subtractBalance(value); // Odejmij od balansu
         categoryExpensesModel.addExpense(value, widget.categoryName);
+        subtractModel.subtractBalance(value);
       }
     }
 

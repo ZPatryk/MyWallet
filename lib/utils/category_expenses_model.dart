@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../provider/category_expenses_model.dart'; // Import modelu CategoryExpensesModel z folderu "provider"
+import '../provider/category_expenses_model.dart';
+import '../provider/subtract_model.dart'; // Import modelu CategoryExpensesModel z folderu "provider"
 
 // Widget wyświetlający wykres kołowy dla wydatków w kategoriach
 class CategoryExpensesPieChart extends StatelessWidget {
@@ -16,34 +17,51 @@ class CategoryExpensesPieChart extends StatelessWidget {
     // Przetwarzamy wydatki, aby połączyć nieznane kategorie pod "Inne"
     final processedExpenses = _processExpenses(expenses);
 
+    final subtractModel = Provider.of<SubtractModel>(context, listen: false);
+
     return Center(
-      // Jeśli mapa `processedExpenses` jest pusta, wyświetlamy komunikat o braku wydatków
       child: processedExpenses.isEmpty
           ? Text("Brak wydatków do wyświetlenia")
-          : PieChart(
-              // PieChartData konfiguruje dane i wygląd wykresu kołowego
-              PieChartData(
-                // Tworzymy listę sekcji wykresu z mapy `processedExpenses`
-                sections: processedExpenses.entries.map((entry) {
-                  final category = entry.key; // Nazwa kategorii (klucz)
-                  final expense = entry.value; // Wartość wydatku (wartość)
+          : Stack(
+              alignment: Alignment.center,
+              children: [
+                // Wykres kołowy
+                PieChart(
+                  PieChartData(
+                    sections: processedExpenses.entries.map((entry) {
+                      final category = entry.key;
+                      final expense = entry.value;
 
-                  // Konfiguracja każdej sekcji wykresu kołowego
-                  return PieChartSectionData(
-                    color: _getCategoryColor(category),
-                    value: expense,
-                    title: '${expense.toStringAsFixed(2)} PLN',
-                    radius: 45,
-                    titleStyle: const TextStyle(
-                      fontSize: 14,
+                      return PieChartSectionData(
+                        color: _getCategoryColor(category),
+                        value: expense,
+                        title: '${expense.toStringAsFixed(1)} \nPLN',
+                        radius: 45,
+                        titleStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      );
+                    }).toList(),
+                    sectionsSpace: 1,
+                    centerSpaceRadius:
+                        45, // Dodajemy przestrzeń na tekst w środku
+                  ),
+                ),
+                // Tekst w środku wykresu
+                Container(
+                  child: Text(
+                    '${subtractModel.substract}\nPLN', // Wyświetl balans
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
-                  );
-                }).toList(), // Konwersja sekcji na listę
-                sectionsSpace: 1,
-                centerSpaceRadius: 45,
-              ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
     );
   }
