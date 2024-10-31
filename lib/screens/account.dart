@@ -62,7 +62,7 @@ class _MyAccountState extends State<MyAccount> {
                     style: TextStyle(color: Colors.white),
                   ),
                   trailing: Text(
-                    '${expense.toStringAsFixed(2)} PLN',
+                    '-${expense.toStringAsFixed(2)} PLN',
                     style: TextStyle(color: Colors.redAccent),
                   ),
                 );
